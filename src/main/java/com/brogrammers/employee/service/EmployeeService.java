@@ -10,5 +10,6 @@ public interface EmployeeService {
 
     List<EmployeeDTO> getAllEmployees();
 
+    EmployeeDTO createEmployee(EmployeeDTO employee);
 
 }

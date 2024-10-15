@@ -4,10 +4,7 @@ import com.brogrammers.employee.dto.EmployeeDTO;
 import com.brogrammers.employee.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +25,12 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable("id") Long id) {
         EmployeeDTO employee = employeeService.getEmployeeById(id);
         return ResponseEntity.ok(employee);
+    }
+
+    @PostMapping
+    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employee) {
+        EmployeeDTO createdEmployee = employeeService.createEmployee(employee);
+        return ResponseEntity.ok(createdEmployee);
     }
 
 }

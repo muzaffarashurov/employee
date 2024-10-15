@@ -8,18 +8,18 @@ public class EmployeeMapper {
     public static Employee mapToEntity(EmployeeDTO employee) {
         return Employee.builder()
                 .id(employee.getId())
-                .name(employee.getName())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
                 .email(employee.getEmail())
-                .department(employee.getDepartment())
                 .build();
     }
 
     public static EmployeeDTO mapToDto(Employee employee) {
         return EmployeeDTO.builder()
                 .id(employee.getId())
-                .name(employee.getName())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
                 .email(employee.getEmail())
-                .department(employee.getDepartment())
                 .build();
     }
 }
