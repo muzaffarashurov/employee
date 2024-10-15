@@ -15,6 +15,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+
     @Override
     public EmployeeDTO getEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Couldn't find employee'" + id));
@@ -25,5 +26,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeDTO> getAllEmployees() {
         List<Employee> employees = employeeRepository.findAll();
         return employees.stream().map(EmployeeMapper::mapToDto).toList();
+    }
+
+    @Override
+    public EmployeeDTO createEmployee(EmployeeDTO employee) {
+        Employee newEmployee = employeeRepository.save(EmployeeMapper.mapToEntity(employee));
+        return EmployeeMapper.mapToDto(newEmployee);
     }
 }
