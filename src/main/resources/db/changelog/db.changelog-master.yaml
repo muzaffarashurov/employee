@@ -34,12 +34,20 @@ databaseChangeLog:
   - include:
       file: changes/002-insert-test-data.yaml
       relativeToChangelogFile: true
-# ---------------------------------------------------------------------------
-# ПОДКЛЮЧЕНИЕ ФАЙЛОВ МИГРАЦИЙ
-# ---------------------------------------------------------------------------
-# Каждый include — отдельный файл с changeSet'ами
-# file — путь относительно resources/
-# relativeToChangelogFile: true — путь считается от текущего файла (удобнее)
+
+  - include:
+      file: changes/003-create-security-tables.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changes/004-insert-security-data.yaml
+      relativeToChangelogFile: true
+
+    # ---------------------------------------------------------------------------
+    # ПОДКЛЮЧЕНИЕ ФАЙЛОВ МИГРАЦИЙ
+    # ---------------------------------------------------------------------------
+    # Каждый include — отдельный файл с changeSet'ами
+    # file — путь относительно resources/
+    # relativeToChangelogFile: true — путь считается от текущего файла (удобнее)
 
     # Пример добавления новой миграции (после запуска создашь файл):
     # - include:

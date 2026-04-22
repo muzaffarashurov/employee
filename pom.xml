@@ -94,59 +94,59 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-<!--        &lt;!&ndash; В секцию <dependencies>, после spring-boot-starter-test добавляем: &ndash;&gt;-->
+        <!-- В секцию <dependencies>, после spring-boot-starter-test добавляем: -->
 
-<!--        &lt;!&ndash; SPRING SECURITY &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-security</artifactId>-->
-<!--            &lt;!&ndash;-->
-<!--                Основной стартер Spring Security.-->
-<!--                Автоматически включает защиту всех endpoint'ов (по умолчанию Basic Auth).-->
-<!--                Мы переопределим это на JWT.-->
-<!--            &ndash;&gt;-->
-<!--        </dependency>-->
+        <!-- SPRING SECURITY -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <!--
+                Основной стартер Spring Security.
+                Автоматически включает защиту всех endpoint'ов (по умолчанию Basic Auth).
+                Мы переопределим это на JWT.
+            -->
+        </dependency>
 
-<!--        &lt;!&ndash; JWT (Java JSON Web Token) - библиотека io.jsonwebtoken &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>io.jsonwebtoken</groupId>-->
-<!--            <artifactId>jjwt-api</artifactId>-->
-<!--            <version>0.12.6</version>-->
-<!--            &lt;!&ndash;-->
-<!--                API для работы с JWT токенами.-->
-<!--                Версия 0.12.x — актуальная, отличается от старых 0.11.x синтаксисом.-->
-<!--            &ndash;&gt;-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.jsonwebtoken</groupId>-->
-<!--            <artifactId>jjwt-impl</artifactId>-->
-<!--            <version>0.12.6</version>-->
-<!--            <scope>runtime</scope>-->
-<!--            &lt;!&ndash;-->
-<!--                Реализация API. scope=runtime значит нужна только при выполнении,-->
-<!--                не при компиляции (код напрямую не используем).-->
-<!--            &ndash;&gt;-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.jsonwebtoken</groupId>-->
-<!--            <artifactId>jjwt-jackson</artifactId>-->
-<!--            <version>0.12.6</version>-->
-<!--            <scope>runtime</scope>-->
-<!--            &lt;!&ndash;-->
-<!--                Поддержка JSON через Jackson для jjwt.-->
-<!--                Нужна для сериализации/десериализации claims в токене.-->
-<!--            &ndash;&gt;-->
-<!--        </dependency>-->
+        <!-- JWT (Java JSON Web Token) - библиотека io.jsonwebtoken -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.12.6</version>
+            <!--
+                API для работы с JWT токенами.
+                Версия 0.12.x — актуальная, отличается от старых 0.11.x синтаксисом.
+            -->
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.12.6</version>
+            <scope>runtime</scope>
+            <!--
+                Реализация API. scope=runtime значит нужна только при выполнении,
+                не при компиляции (код напрямую не используем).
+            -->
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.12.6</version>
+            <scope>runtime</scope>
+            <!--
+                Поддержка JSON через Jackson для jjwt.
+                Нужна для сериализации/десериализации claims в токене.
+            -->
+        </dependency>
 
-<!--        &lt;!&ndash; VALIDATION - для @NotBlank, @Email и т.д. в DTO &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-validation</artifactId>-->
-<!--            &lt;!&ndash;-->
-<!--                Стартер для Bean Validation (Hibernate Validator).-->
-<!--                Позволяет валидировать поля DTO аннотациями.-->
-<!--            &ndash;&gt;-->
-<!--        </dependency>-->
+        <!-- VALIDATION - для @NotBlank, @Email и т.д. в DTO -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+            <!--
+                Стартер для Bean Validation (Hibernate Validator).
+                Позволяет валидировать поля DTO аннотациями.
+            -->
+        </dependency>
     </dependencies>
 
     <build>

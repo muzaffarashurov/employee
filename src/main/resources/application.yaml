@@ -79,6 +79,15 @@ server:
       # Все API будут начинаться с /api/...
       # Пример: http://localhost:8080/api/employees
     context-path: /api
+app:
+  jwt:
+    # Секретный ключ для подписи токенов. Должен быть длинным и сложным!
+    # В продакшене лучше хранить в переменных окружения, не в коде.
+    secret: mySuperSecretKeyForJwtTokenThatShouldBeVeryLongAndSecureAtLeast256Bits1234567890abcdef
+
+    # Время жизни access-токена в миллисекундах
+    # 86400000 = 24 часа (1 сутки)
+    expiration-ms: 86400000
 
   # ---------------------------------------------------------------------------
   # ЛОГИРОВАНИЕ
