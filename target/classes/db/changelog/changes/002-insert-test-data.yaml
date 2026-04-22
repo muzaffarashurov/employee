@@ -1,0 +1,179 @@
+# =============================================================================
+# МИГРАЦИЯ 002: ЗАПОЛНЕНИЕ ТАБЛИЦЫ ТЕСТОВЫМИ ДАННЫМИ
+# =============================================================================
+
+databaseChangeLog:
+  # ---------------------------------------------------------------------------
+  # CHANGESET 1: ВСТАВКА ДАННЫХ ЧЕРЕЗ insert
+  # ---------------------------------------------------------------------------
+  - changeSet:
+      id: 002-insert-test-employees
+      author: developer
+      context: dev
+      comment: Тестовые данные сотрудников (5 записей)
+
+      changes:
+        - insert:
+            tableName: employees
+            columns:
+              - column:
+                  name: first_name
+                  value: Иван
+              - column:
+                  name: last_name
+                  value: Иванов
+              - column:
+                  name: email
+                  value: ivan.ivanov@company.ru
+              - column:
+                  name: position
+                  value: Java Developer
+              - column:
+                  name: salary
+                  valueNumeric: 150000.00
+
+        - insert:
+            tableName: employees
+            columns:
+              - column:
+                  name: first_name
+                  value: Мария
+              - column:
+                  name: last_name
+                  value: Петрова
+              - column:
+                  name: email
+                  value: maria.petrova@company.ru
+              - column:
+                  name: position
+                  value: QA Engineer
+              - column:
+                  name: salary
+                  valueNumeric: 120000.00
+
+        - insert:
+            tableName: employees
+            columns:
+              - column:
+                  name: first_name
+                  value: Алексей
+              - column:
+                  name: last_name
+                  value: Сидоров
+              - column:
+                  name: email
+                  value: alexey.sidorov@company.ru
+              - column:
+                  name: position
+                  value: Team Lead
+              - column:
+                  name: salary
+                  valueNumeric: 250000.00
+
+        - insert:
+            tableName: employees
+            columns:
+              - column:
+                  name: first_name
+                  value: Ольга
+              - column:
+                  name: last_name
+                  value: Кузнецова
+              - column:
+                  name: email
+                  value: olga.kuznetsova@company.ru
+
+        - insert:
+            tableName: employees
+            columns:
+              - column:
+                  name: first_name
+                  value: Дмитрий
+              - column:
+                  name: last_name
+                  value: Смирнов
+              - column:
+                  name: email
+                  value: dmitry.smirnov@company.ru
+              - column:
+                  name: position
+                  value: DevOps Engineer
+              - column:
+                  name: salary
+                  valueNumeric: 200000.00
+
+      # ОТКАТ: одна строка, без переносов
+      rollback:
+        - delete:
+            tableName: employees
+            where: "email IN ('ivan.ivanov@company.ru', 'maria.petrova@company.ru', 'alexey.sidorov@company.ru', 'olga.kuznetsova@company.ru', 'dmitry.smirnov@company.ru')"
+
+  # ---------------------------------------------------------------------------
+  # CHANGESET 2: ЗАГРУЗКА ИЗ CSV (пока отключен — убери, если не нужен)
+  # ---------------------------------------------------------------------------
+  # Если CSV файла нет — этот changeSet вызовет ошибку!
+  # Удали весь блок ниже, если не используешь CSV
+  - changeSet:
+      id: 002-load-employees-from-csv
+      author: developer
+      context: dev
+      comment: Загрузка сотрудников из CSV
+
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: "SELECT COUNT(*) FROM employees WHERE email LIKE '%@csv.ru'"
+
+      changes:
+        - loadData:
+            tableName: employees
+            file: data/employees.csv
+            relativeToChangelogFile: true
+            separator: ','
+            encoding: UTF-8
+            columns:
+              - column:
+                  header: first_name
+                  name: first_name
+                  type: STRING
+              - column:
+                  header: last_name
+                  name: last_name
+                  type: STRING
+              - column:
+                  header: email
+                  name: email
+                  type: STRING
+              - column:
+                  header: position
+                  name: position
+                  type: STRING
+              - column:
+                  header: salary
+                  name: salary
+                  type: NUMERIC
+
+      rollback:
+        - delete:
+            tableName: employees
+            where: "email LIKE '%@csv.ru'"
+
+  # ---------------------------------------------------------------------------
+  # CHANGESET 3: SQL-ВСТАВКА
+  # ---------------------------------------------------------------------------
+  - changeSet:
+      id: 002-insert-via-sql
+      author: developer
+      context: dev
+      comment: Вставка через SQL
+
+      changes:
+        - sql:
+            dbms: mysql
+            sql: "INSERT INTO employees (first_name, last_name, email, position, salary) VALUES ('Елена', 'Волкова', 'elena.volkova@company.ru', 'HR Manager', 110000.00), ('Сергей', 'Морозов', 'sergey.morozov@company.ru', 'System Administrator', 130000.00) ON DUPLICATE KEY UPDATE first_name = VALUES(first_name), last_name = VALUES(last_name)"
+
+      rollback:
+        - sql:
+            dbms: mysql
+            sql: "DELETE FROM employees WHERE email IN ('elena.volkova@company.ru', 'sergey.morozov@company.ru')"

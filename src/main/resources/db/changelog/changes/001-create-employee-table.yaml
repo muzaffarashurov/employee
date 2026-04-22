@@ -1,0 +1,158 @@
+# =============================================================================
+# МИГРАЦИЯ 001: СОЗДАНИЕ ТАБЛИЦЫ EMPLOYEES
+# =============================================================================
+# Файл миграции содержит один или несколько changeSet'ов.
+#
+# ВАЖНЫЕ ПРАВИЛА:
+# 1. id должен быть УНИКАЛЬНЫМ и НЕИЗМЕННЫМ после применения
+# 2. author — кто создал (для отслеживания)
+# 3. Нельзя изменять changeSet после применения! Только добавлять новые.
+# 4. Каждый changeSet атомарен — либо выполняется целиком, либо откатывается целиком
+databaseChangeLog:
+  # ---------------------------------------------------------------------------
+  # CHANGESET 001: СОЗДАНИЕ ТАБЛИЦЫ
+  # ---------------------------------------------------------------------------
+  - changeSet:
+      # Уникальный ID миграции. Формат: номер-описание
+      # НЕ ИЗМЕНЯЙ после применения! Liquibase запишет его в БД.
+      id: 001-create-employee-table
+
+      # Автор миграции (твое имя/ник)
+      author: developer
+
+      # Контексты — когда выполнять эту миграцию. Пусто = всегда.
+      context: ""
+
+      # Комментарий для документации (виден в DATABASECHANGELOG)
+      comment: Создание таблицы сотрудников с базовыми полями
+
+      # -----------------------------------------------------------------------
+      # СПИСОК ИЗМЕНЕНИЙ (changes)
+      # -----------------------------------------------------------------------
+      changes:
+        # 1. СОЗДАНИЕ ТАБЛИЦЫ
+        # createTable — Liquibase-операция создания таблицы
+        # Кроссплатформенная: сама адаптирует типы под MySQL/Postgres/Oracle
+        - createTable:
+            # Имя таблицы в БД (совпадает с @Table(name="employees") в Entity)
+            tableName: employees
+
+            # Колонки таблицы (порядок важен!)
+            columns:
+              # --- Колонка ID (Первичный ключ) ---
+              - column:
+                  name: id                    # Имя колонки
+                  type: BIGINT                # Тип данных (Liquibase адаптирует под БД)
+                  autoIncrement: true         # Автоинкремент (MySQL: AUTO_INCREMENT)
+                  constraints: # Ограничения колонки
+                    primaryKey: true          # Является первичным ключом
+                    nullable: false           # Не может быть NULL
+                    primaryKeyName: pk_employees  # Имя ограничения PK (для красоты)
+
+              # --- Колонка first_name ---
+              - column:
+                  name: first_name
+                  type: VARCHAR(100)          # Строка до 100 символов
+                  constraints:
+                    nullable: false           # Обязательное поле
+
+              # --- Колонка last_name ---
+              - column:
+                  name: last_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              # --- Колонка email (уникальная) ---
+              - column:
+                  name: email
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+                    unique: true              # Уникальное значение (индекс автоматически)
+                    uniqueConstraintName: uk_employees_email  # Имя ограничения уникальности
+
+              # --- Колонка position (должность) ---
+              - column:
+                  name: position
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: true            # Может быть NULL (необязательное)
+
+              # --- Колонка salary ---
+              - column:
+                  name: salary
+                  type: DECIMAL(10, 2)        # Десятичное: 10 цифр всего, 2 после запятой
+                  constraints:
+                    nullable: true
+
+              # --- Колонка created_at (дата создания) ---
+              - column:
+                  name: created_at
+                  type: TIMESTAMP             # Дата+время
+                  defaultValueComputed: CURRENT_TIMESTAMP  # Значение по умолчанию
+                  constraints:
+                    nullable: false
+
+              # --- Колонка updated_at (дата обновления) ---
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+      # -----------------------------------------------------------------------
+      # ОТКАТ МИГРАЦИИ (rollback)
+      # -----------------------------------------------------------------------
+      # Что делать при откате: liquibase rollbackCount 1
+      # Важно: rollback должен точно отменять изменения changeSet
+      rollback:
+        - dropTable:
+            tableName: employees
+
+  # ---------------------------------------------------------------------------
+  # CHANGESET 002: СОЗДАНИЕ ИНДЕКСА (пример дополнительной операции)
+  # ---------------------------------------------------------------------------
+  # Индексы ускоряют поиск, но замедляют вставку. Добавляй осмысленно!
+  - changeSet:
+      id: 001-create-index-position
+      author: developer
+      comment: Индекс для ускорения поиска по должности
+      changes:
+        - createIndex:
+            tableName: employees
+            indexName: idx_employees_position
+            columns:
+              - column:
+                  name: position
+
+      rollback:
+        - dropIndex:
+            tableName: employees
+            indexName: idx_employees_position
+
+  # ---------------------------------------------------------------------------
+  # CHANGESET 003: ТРИГГЕР ДЛЯ updated_at (MySQL-специфично)
+  # ---------------------------------------------------------------------------
+  # Автоматическое обновление updated_at при изменении записи
+  # Примечание: это SQL-операция, т.к. триггеры сильно отличаются в разных БД
+  - changeSet:
+      id: 001-create-trigger-updated-at
+      author: developer
+      comment: Триггер автоматического обновления updated_at
+      changes:
+        - sql:
+            # dbms: mysql — эта миграция выполнится только для MySQL!
+            dbms: mysql
+            # SQL-код триггера (MySQL-специфичный)
+            sql: |
+              CREATE TRIGGER trg_employees_updated_at 
+              BEFORE UPDATE ON employees
+              FOR EACH ROW
+              SET NEW.updated_at = CURRENT_TIMESTAMP;
+
+      rollback:
+        - sql:
+            dbms: mysql
+            sql: DROP TRIGGER IF EXISTS trg_employees_updated_at;
