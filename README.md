@@ -5,7 +5,7 @@
 ## Технологии
 
 - Java 17
-- Spring Boot 4.0.5
+- Spring Boot 3.5.3
 - Spring MVC, Spring Data JPA
 - MySQL
 - Liquibase
